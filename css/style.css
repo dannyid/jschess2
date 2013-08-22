@@ -1,0 +1,44 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 600px;
+    height: 600px;
+    border-width: 0px;
+} 
+        
+.black {
+    background-color: grey;
+}
+
+table {
+    height: 100%;
+    width: 100%;
+    border-width: inherit;
+    border-spacing: 0px;
+}
+
+tbody { 
+    border-width: inherit;
+}
+
+tr {
+    height: 12.5%;
+    border-width: inherit;
+}
+            
+td {
+    width: 12.5%;
+    height: 12.5%;
+    border-width: inherit;
+    text-align: center;
+}
+
+td:hover {
+    background-color: rgb(255, 170, 170);
+}
+
+img {
+    position: relative:
+    height: 100%;
+    width: 100%;
+}
