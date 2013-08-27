@@ -32,11 +32,10 @@ Piece.prototype = piecePrototype;
 
 var board = {
     whoseTurn: "white",
-    whiteTeam: buildTeam('white'),
-    backTeam: buildTeam('black')
+    pieces: []
 };
 
-function pieceConfiguration(color) {
+function piecesConfig(color) {
     var cols = ['a','b','c','d','e','f','g','h'];
     var backRow = color === 'white' ? 1 : 8;
     return {
@@ -47,59 +46,55 @@ function pieceConfiguration(color) {
         queen: 'd' + backRow,
         king: 'e' + backRow
     }
-}
+};
 
-function buildTeam(color) {
-    var config = pieceConfiguration(color);
-    var team = {
-        color: color,
-        score: 39,
-        pieces: []
-    };
+function buildPieces(color) {
+    var pieceConfig = piecesConfig(color);
+    var pieces = [];
+    
     for (var i = 0; i < 8; i++) {
-        team.pieces.push(new Piece('pawn', color, config.pawn[i]));
+        pieces.push(new Piece('pawn', color, pieceConfig.pawn[i]));
     }
     for (var i = 0; i < 2; i++) {
-        team.pieces.push(new Piece('rook', color, config.rook[i]));
+        pieces.push(new Piece('rook', color, pieceConfig.rook[i]));
+        pieces.push(new Piece('knight', color, pieceConfig.knight[i]));
+        pieces.push(new Piece('bishop', color, pieceConfig.bishop[i]));
     }
-    for (var i = 0; i < 2; i++) {
-        team.pieces.push(new Piece('knight', color, config.knight[i]));
-    }
-    for (var i = 0; i < 2; i++) {
-        team.pieces.push(new Piece('bishop', color, config.bishop[i]));
-    }
-    team.pieces.push(new Piece('queen', color, config.queen));
-    team.pieces.push(new Piece('king', color, config.king));
-    return team;
-}
+    pieces.push(new Piece('queen', color, pieceConfig.queen));
+    pieces.push(new Piece('king', color, pieceConfig.king));
+    return pieces;
+};
 
-board.whiteTeam = buildTeam('white');
-board.blackTeam = buildTeam('black');
+board.pieces = buildPieces("white");
+board.pieces = board.pieces.concat(buildPieces("black"));
 
-function initBoard(team) {
-    for (var i = 0; i < team.pieces.length; i++) {
-        $("td#" + team.pieces[i].origin).append(team.pieces[i].$imgTag);
+function initBoard(pieces) {
+    for (var i = 0; i < pieces.length; i++) {
+        $("td#" + pieces[i].currentPos).append(pieces[i].$imgTag);
     };
 };
 
-initBoard(board.whiteTeam);
-initBoard(board.blackTeam); 
+initBoard(board.pieces);
 
 $("td").click(function() {
     var $this = $(this);
-    var currentPiece;
+    var currentPiece = board.pieces.filter(function(p) {return p.currentPos === $this.attr("id")});
+    var selectedPiece = board.pieces.filter(function(p) {return p.selected === "Y"});
 
     console.log($this);
 
-    if (board.whoseTurn === "white") {
-        currentPiece = board.whiteTeam.pieces.filter(function(val) {
-            return val.currentPos === $this.attr("id"); 
-        });
-        if (currentPiece[0] !== undefined) {
-            currentPiece[0].selected = "Y";
+    if (selectedPiece.length === 0) {
+        if (board.whoseTurn === currentPiece[0].color && currentPiece[0] !== undefined) {
+            $this.css("background-color", $this.attr("style") ? "" : "rgb(255, 0, 0)");
+            currentPiece[0].selected = currentPiece[0].selected === "N" ? "Y" : "N";
         }
-    } else {
-
+    } else if (selectedPiece.length === 1) {
+        $this.css("background-color", $this.attr("style") ? "" : "rgb(255, 0, 0)");
+        if (currentPiece[0] === undefined) {
+            $this.append(selectedPiece[0].$imgTag);
+        } else {}
+      //  if (currentPiece[0].color !== board.whoseTurn) {
+       // }
     };
 
     console.log(currentPiece[0])
