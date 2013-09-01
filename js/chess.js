@@ -35,7 +35,7 @@ var board = {
     pieces: []
 };
 
-function piecesConfig(color) {
+function pieceConfig(color) {
     var cols = ['a','b','c','d','e','f','g','h'];
     var backRow = color === 'white' ? 1 : 8;
     return {
@@ -49,19 +49,19 @@ function piecesConfig(color) {
 };
 
 function buildPieces(color) {
-    var pieceConfig = piecesConfig(color);
+    var startingPos = pieceConfig(color);
     var pieces = [];
     
     for (var i = 0; i < 8; i++) {
-        pieces.push(new Piece('pawn', color, pieceConfig.pawn[i]));
+        pieces.push(new Piece('pawn', color, startingPos.pawn[i]));
     }
     for (var i = 0; i < 2; i++) {
-        pieces.push(new Piece('rook', color, pieceConfig.rook[i]));
-        pieces.push(new Piece('knight', color, pieceConfig.knight[i]));
-        pieces.push(new Piece('bishop', color, pieceConfig.bishop[i]));
+        pieces.push(new Piece('rook', color, startingPos.rook[i]));
+        pieces.push(new Piece('knight', color, startingPos.knight[i]));
+        pieces.push(new Piece('bishop', color, startingPos.bishop[i]));
     }
-    pieces.push(new Piece('queen', color, pieceConfig.queen));
-    pieces.push(new Piece('king', color, pieceConfig.king));
+    pieces.push(new Piece('queen', color, startingPos.queen));
+    pieces.push(new Piece('king', color, startingPos.king));
     return pieces;
 };
 
@@ -80,22 +80,28 @@ $("td").click(function() {
     var $this = $(this);
     var currentPiece = board.pieces.filter(function(p) {return p.currentPos === $this.attr("id")});
     var selectedPiece = board.pieces.filter(function(p) {return p.selected === "Y"});
+    
+    function swapColor() {
+        $this.css("background-color", $this.attr("style") ? "" : "rgb(255, 0, 0)");
+    };
 
     console.log($this);
 
     if (selectedPiece.length === 0) {
         if (board.whoseTurn === currentPiece[0].color && currentPiece[0] !== undefined) {
-            $this.css("background-color", $this.attr("style") ? "" : "rgb(255, 0, 0)");
+            swapColor();
             currentPiece[0].selected = currentPiece[0].selected === "N" ? "Y" : "N";
         }
-    } else if (selectedPiece.length === 1) {
-        $this.css("background-color", $this.attr("style") ? "" : "rgb(255, 0, 0)");
+    } else if (selectedPiece[0] === currentPiece[0]) {
+        swapColor();
         if (currentPiece[0] === undefined) {
             $this.append(selectedPiece[0].$imgTag);
         } else {}
       //  if (currentPiece[0].color !== board.whoseTurn) {
        // }
-    };
+    } else if (x) [
+    
+    ];
 
     console.log(currentPiece[0])
 });
